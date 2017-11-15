@@ -1,5 +1,6 @@
 package ca.npars.twitterten;
 
+import ca.npars.twitterten.twitter.Tweet;
 import ca.npars.twitterten.twitter.TwitterApi;
 import twitter4j.TwitterException;
 
@@ -9,19 +10,16 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import java.util.List;
 
 @Path("twitterten-api")
 public class TwitterTenResource {
-    private static final String TWITTER_CONSUMER_KEY = "TWITTER_CONSUMER_KEY";
-    private static final String TWITTER_CONSUMER_SECRET = "TWITTER_CONSUMER_SECRET";
+    private static final String DEFAULT_TWITTER_ACCOUNT = "salesforce";
 
     private final TwitterApi twitterApi;
 
     public TwitterTenResource() {
-        String consumerKey = System.getenv(TWITTER_CONSUMER_KEY);
-        String consumerSecret = System.getenv(TWITTER_CONSUMER_SECRET);
-        twitterApi = new TwitterApi(consumerKey, consumerSecret);
+        twitterApi = new TwitterApi.Builder().create();
     }
 
     /**
@@ -32,8 +30,12 @@ public class TwitterTenResource {
      */
     @Path("tweets")
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String listTweets() {
-        return "Got it!";
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Tweet> listTweets() {
+        try {
+            return this.twitterApi.getTweets(DEFAULT_TWITTER_ACCOUNT);
+        } catch (TwitterException e) {
+            throw new WebApplicationException(e);
+        }
     }
 }

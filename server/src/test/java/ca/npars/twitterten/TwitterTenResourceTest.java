@@ -31,9 +31,6 @@ public class TwitterTenResourceTest {
         server.shutdownNow();
     }
 
-    /**
-     * Test to see that the message "Got it!" is sent in the response.
-     */
     @Test
     public void testListTweets() {
         String responseMsg = target.path("tweets").request().get(String.class);
