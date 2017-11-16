@@ -10,6 +10,7 @@ import java.net.URI;
 /**
  * Main class.
  *
+ * Starts the web server and initializes resources and bindings.
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
@@ -22,7 +23,9 @@ public class Main {
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
         // in ca.npars.twitterten package
-        final ResourceConfig rc = new ResourceConfig().packages("ca.npars.twitterten");
+        final ResourceConfig rc = new ResourceConfig()
+                .packages("ca.npars.twitterten")
+                .register(new ApiBinder());
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

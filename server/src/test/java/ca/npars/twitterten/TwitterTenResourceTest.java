@@ -1,39 +1,57 @@
 package ca.npars.twitterten;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
-import org.glassfish.grizzly.http.server.HttpServer;
+import ca.npars.twitterten.twitter.TwitterApi;
 
-import org.junit.After;
-import org.junit.Before;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import twitter4j.TwitterException;
+
+import java.util.Collections;
+
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-public class TwitterTenResourceTest {
+public class TwitterTenResourceTest extends JerseyTest {
+    @Mock
+    private TwitterApi twitterApi;
 
-    private HttpServer server;
-    private WebTarget target;
-
-    @Before
-    public void setUp() throws Exception {
-        // start the server
-        server = Main.startServer();
-        // create the client
-        Client c = ClientBuilder.newClient();
-
-        target = c.target(Main.BASE_URI).path("twitterten-api");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        server.shutdownNow();
+    @Override
+    public ResourceConfig configure() {
+        // Register our resource with a mocked api binding
+        MockitoAnnotations.initMocks(this);
+        return new ResourceConfig()
+                .register(TwitterTenResource.class)
+                .register(new AbstractBinder() {
+                    @Override
+                    protected void configure() {
+                        bind(twitterApi).to(TwitterApi.class);
+                    }
+                });
     }
 
     @Test
-    public void testListTweets() {
-//        String responseMsg = target.path("tweets").request().get(String.class);
-//        assertEquals("Got it!", responseMsg);
+    public void testListTweets() throws TwitterException {
+        String expectedBody = "[]";
+
+        when(twitterApi.getTweets(any())).thenReturn(Collections.emptyList());
+
+        Response response = target("twitterten-api/tweets").request().get();
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(expectedBody, response.readEntity(String.class));
+    }
+
+    @Test
+    public void testServerErrorOnException() throws TwitterException {
+        when(twitterApi.getTweets(any())).thenThrow(new TwitterException("A test exception"));
+
+        Response response = target("twitterten-api/tweets").request().get();
+        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
     }
 }

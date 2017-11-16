@@ -49,7 +49,7 @@ public class StatusToTweetAdapter implements Tweet {
     public List<URL> getImages() {
         List<URL> images = new ArrayList<>();
         for (MediaEntity mediaEntity : status.getMediaEntities()) {
-            if (!mediaEntity.getType().equals(PHOTO) && !mediaEntity.getType().equals(GIF)) {
+            if (!PHOTO.equals(mediaEntity.getType()) && !GIF.equals(mediaEntity.getType())) {
                 continue;
             }
 

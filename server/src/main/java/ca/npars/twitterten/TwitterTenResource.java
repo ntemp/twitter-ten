@@ -4,23 +4,22 @@ import ca.npars.twitterten.twitter.Tweet;
 import ca.npars.twitterten.twitter.TwitterApi;
 import twitter4j.TwitterException;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("twitterten-api")
 public class TwitterTenResource {
     private static final String DEFAULT_TWITTER_ACCOUNT = "salesforce";
 
-    private final TwitterApi twitterApi;
+    @Inject
+    private TwitterApi twitterApi;
 
-    public TwitterTenResource() {
-        twitterApi = new TwitterApi.Builder().create();
-    }
+    public TwitterTenResource() {}
 
     /**
      * Method handling HTTP GET requests. The returned object will be sent

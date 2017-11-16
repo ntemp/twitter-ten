@@ -7,12 +7,13 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 /**
- * CorsFilter for allowing CORS access
+ * CorsFilter for allowing CORS access. Only really necessary for dev testing at the moment.
+ * Should be removed in a production environment where CORS is not necessary.
  */
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
-
     private final String HEADERS = "Origin, Content-Type, Accept";
+
     @Override
     public void filter(ContainerRequestContext request, ContainerResponseContext response) throws IOException {
         response.getHeaders().add("Access-Control-Allow-Origin", "*");
