@@ -1,5 +1,5 @@
 # fetch basic image
-FROM maven:3.5-jdk-9
+FROM maven:3.5-jdk-9-slim
 
 # application placed into /opt/app
 WORKDIR /opt/app

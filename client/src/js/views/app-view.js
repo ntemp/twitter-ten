@@ -2,48 +2,57 @@
 var app = app || {};
 
 (function ($) {
-	'use strict';
+    'use strict';
 
-	// The Application
-	// ---------------
+    // The Application
+    // ---------------
 
-	// Our overall **AppView** is the top-level piece of UI.
-	app.AppView = Backbone.View.extend({
-		el: '.twitterapp',
+    // Our overall **AppView** is the top-level piece of UI.
+    app.AppView = Backbone.View.extend({
+        el: '.tweetapp',
 
-		// At initialization we bind to the relevant events on the `Tweets`
-		// collection.
-		initialize: function () {
-			this.$filterInput = this.$('.tweet-filter');
-			this.$list = $('.tweet-list');
+        // Delegated events
+        events: {
+            'keyup .tweet-filter': 'addAll'
+        },
 
-			this.listenTo(app.tweets, 'sync', this.addAll);
-			this.listenTo(app.tweets, 'filter', this.filterAll);
+        // At initialization we bind to the relevant events on the `Tweets`
+        // collection.
+        initialize: function () {
+            this.$filterInput = this.$('.tweet-filter');
+            this.$list = $('.tweet-list');
+
+            this.listenTo(app.tweets, 'sync', this.addAll);
+            this.listenTo(app.tweets, 'filter', this.filterAll);
 
             // Perform the initial fetch
-			app.tweets.fetch();
-		},
+            app.tweets.fetch();
+        },
 
-		// Add a single tweet item to the list by creating a view for it, and
-		// appending its element to the `<ul>`.
-		addOne: function (tweet) {
-			var view = new app.TweetView({ model: tweet });
-			this.$list.append(view.render().el);
-		},
+        // Add a single tweet item to the list by creating a view for it, and
+        // appending its element to the `<ul>`.
+        addOne: function (tweet) {
+            if (!this.isTweetVisible(tweet.get("text"))) {
+                return;
+            }
 
-		// Add all items in the **Tweets** collection at once.
-		addAll: function () {
-		    console.log('add all')
-			this.$list.html('');
-			app.tweets.each(this.addOne, this);
-		},
+            var view = new app.TweetView({ model: tweet });
+            this.$list.append(view.render().el);
+        },
 
-		filterAll: function () {
-			app.tweets.each(this.filterOne, this);
-		},
+        // Add all items in the **Tweets** collection at once.
+        addAll: function () {
+            this.$list.html('');
+            app.tweets.each(this.addOne, this);
+        },
 
-        filterOne: function (tweet) {
-            tweet.trigger('visible');
+        isTweetVisible: function (text) {
+            var filterValue = this.$filterInput.val()
+            if (_.isEmpty(filterValue)) {
+                return true;
+            }
+
+            return text.search(new RegExp(filterValue.trim(), "i")) !== -1;
         }
-	});
+    });
 })(jQuery);

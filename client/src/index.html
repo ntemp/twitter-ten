@@ -1,50 +1,44 @@
 <!doctype html>
 <html lang="en" data-framework="backbonejs">
-	<head>
-		<meta charset="utf-8">
-		<title>Backbone.js • TodoMVC</title>
-		<link rel="stylesheet" href="styles/default.css">
-		<!--<link rel="stylesheet" href="node_modules/todomvc-common/base.css">-->
-		<!--<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">-->
-	</head>
-	<body>
-		<section class="tweetapp">
-			<header class="header">
-				<h1>Tweets</h1>
-				<input class="tweet-filter" placeholder="Enter text to filter tweets." autofocus>
-			</header>
-			<section class="main">
-				<ul class="tweet-list"></ul>
-			</section>
-		</section>
+    <head>
+        <meta charset="utf-8">
+        <title>Latest 10 Tweets</title>
+        <link rel="stylesheet" href="styles/default.css">
+    </head>
+    <body>
+        <section class="tweetapp">
+            <header class="header">
+                <h1>Tweets</h1>
+                <input class="tweet-filter" placeholder="Enter text to filter tweets." autofocus>
+            </header>
+            <section class="main">
+                <ul class="tweet-list"></ul>
+            </section>
+        </section>
 
-		<script type="text/template" id="tweet-template">
-			<div class="flex-col">
-				<div class="flex-row">
-					<img class="profile-image" src=<%= profileImage %> />
-					<label>@<%- screenName %> (<%- userName %>)</label>
-				</div>
-				<div><%- text %></div>
-				<% if (!_.isEmpty(images)) { %>
-					<% _.each(images, function(image) { %>
-						<img src=<%= image %> />
-				    <% }) %>
-				<% } %>
-				<div>Retweets: <%- retweets %></div>
-				<div>Date: <%- date %></div>
-			</div>
-		</script>
+        <script type="text/template" id="tweet-template">
+            <div class="flex-col">
+                <div class="flex-row">
+                    <img class="profile-image" src=<%= profileImage %> />
+                    <label>@<%- screenName %> (<%- userName %>)</label>
+                </div>
+                <div><%- text %></div>
+                <% if (!_.isEmpty(images)) { %>
+                    <% _.each(images, function(image) { %>
+                        <img src=<%= image %> />
+                    <% }) %>
+                <% } %>
+                <div>Retweets: <%- retweets %></div>
+                <div>Date: <%- date %></div>
+            </div>
+        </script>
 
-		<!--<script src="node_modules/todomvc-common/base.js"></script>-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.16/backbone.localStorage-min.js"></script>
-		<!--<script src="js/models/todo.js"></script>-->
-		<script src="js/collections/tweets.js"></script>
-		<script src="js/views/tweet-view.js"></script>
-		<script src="js/views/app-view.js"></script>
-		<!--<script src="js/routers/router.js"></script>-->
-		<script src="js/app.js"></script>
-	</body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
+        <script src="js/collections/tweets.js"></script>
+        <script src="js/views/tweet-view.js"></script>
+        <script src="js/views/app-view.js"></script>
+        <script src="js/app.js"></script>
+    </body>
 </html>
