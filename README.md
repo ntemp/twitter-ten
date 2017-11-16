@@ -17,7 +17,7 @@ mvn exec:java
 ```
 
 ## What's Done
-* Use Twitter5j to query twitter
+* Use Twitter4j to query twitter
 * Return results in JSON via an endpoint
 * Display tweets in client frontend
 * Filter tweets
